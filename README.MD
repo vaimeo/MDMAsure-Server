@@ -29,13 +29,14 @@ Before you begin, ensure you have the following prerequisites installed:
 
 - Node.js: [Download](https://nodejs.org/) (v16.5.1) 
 - npm (Node Package Manager): [Download](https://www.npmjs.com/get-npm) (v8.11.0)
+- bun [Download](https://bun.sh/) 
 
 ### Configuration
 
 1. Set up your Google Application Credentials by exporting the JSON key file path:
 
    ```shell
-   export GOOGLE_APPLICATION_CREDENTIALS="/Users/Mac/Projects/wajid/mdm/server/env/auth.json"
+   export GOOGLE_APPLICATION_CREDENTIALS="/PATH_TO_YOUR_FILE/auth.json"
 
 To get the auth.json file please follow the official google [guidelines](https://github.com/googleapis/google-api-nodejs-client/tree/main#service-account-credentials) 
 
@@ -53,12 +54,12 @@ PROVESION_URL="https://5268-91-72-173-142.ngrok.io/enterprise/callback"
 SERVER_PORT=9013
 ```
 
+3. Create the database in mysql import [this](database.sql) file.
 
-
-3. To start the project, run the following command:
+4. To start the project, run the following command:
 
 ```shell 
- npm run start
+ bun start
 ```
 # API Reference
 We have create the api endpoints to intract with google Android management service you can find the complete documentation [here]().
