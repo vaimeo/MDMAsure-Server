@@ -1,0 +1,22 @@
+<div class="table-scroll">
+  <table>
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Version</th>
+              <th colspan="2">Action</th>
+          </tr>
+      </thead>
+      <tbody>
+          <% data.policies.forEach(function(report) { %>
+              <tr>
+                  <td><%= report.name %></td>
+                  <td><%= report.state %></td>
+                  <td><a href="/policy/details?name=<%= report.name %>" target="_blank">Details</a></td>
+                  <td><a href="/policy/generateToken?name=<%= report.name %>" target="_blank">Geneate Token</a></td>
+              </tr>
+          <% }) %>
+      </tbody>
+ </table>
+</div>
+

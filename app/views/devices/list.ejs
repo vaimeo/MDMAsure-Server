@@ -1,0 +1,22 @@
+<div class="table-scroll">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.devices.forEach(function(report) { %>
+                <tr>
+                    <td><%= report.name %></td>
+                    <td><%= report.state %></td>
+                    <td><a href="/device/details?name=<%= report.name %>" target="_blank">Details</a></td>
+                </tr>
+            <% }) %>
+        </tbody>
+   </table>
+  </div>
+
+ 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <title><%= title ? title : 'no title' %></title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation-float.min.css" integrity="sha256-4ldVyEvC86/kae2IBWw+eJrTiwNEbUUTmN0zkP4luL4=" crossorigin="anonymous">
+
+        <!-- foundation-prototype.min.css: Compressed CSS with prototyping classes -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation-prototype.min.css" integrity="sha256-BiKflOunI0SIxlTOOUCQ0HgwXrRrRwBkIYppEllPIok=" crossorigin="anonymous">
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"  crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+      </head>
+  <body>
+
+<div class="app-dashboard shrink-medium">
+  <%-include("../partials/header",{menyItemTitle:'mytitle'}) %>
+
+
+  <div class="app-dashboard-body off-canvas-wrapper">
+
+    <%-include ../partials/sidebar %>
+    
+    <div class="app-dashboard-body-content off-canvas-content" data-off-canvas-content>
+      <%- body %>
+    </div>
+
+
+  </div>
+  <%-include("../partials/footer") %>
+
+</div>
+
+</body>
+<script>
+  $(document).foundation();
+</script>
+</html>

@@ -1,0 +1,84 @@
+<button id="myButton">Click me</button>
+<%-data%>
+<pre>
+  <%- jsondata %>
+</pre>
+<form method="post" id="form">
+  
+
+
+<label for="tetheringConfigDisabled">tetheringConfigDisabled</label>
+<input id="tetheringConfigDisabled" type="checkbox" name="tetheringConfigDisabled"  value="true" checked="<%-(data.tetheringConfigDisabled) ? '' : "checked" %>" >
+<hr>
+<label for="networkEscapeHatchEnabled">networkEscapeHatchEnabled</label>
+<input id="networkEscapeHatchEnabled" type="checkbox" name="networkEscapeHatchEnabled"  value="true"   checked="<%-(data.networkEscapeHatchEnabled) ? '' : "checked" %>" >
+<hr>
+<label for="bluetoothDisabled">bluetoothDisabled</label>
+<input id="bluetoothDisabled" type="checkbox" name="bluetoothDisabled"   value="true"  checked="<%-(data.bluetoothDisabled) ? '' : "checked" %>" >
+<hr>
+<label for="debuggingFeaturesAllowed">debuggingFeaturesAllowed</label>
+<input id="debuggingFeaturesAllowed" type="checkbox" name="debuggingFeaturesAllowed"  value="true"   checked="<%-(data.debuggingFeaturesAllowed) ? '' : "checked" %>" >
+<hr>
+<label for="kioskCustomLauncherEnabled">kioskCustomLauncherEnabled</label>
+<input type="radio" name="kioskCustomLauncherEnabled" value="true" <%-(data.kioskCustomLauncherEnabled && data.kioskCustomLauncherEnabled ==true) ? "checked" : '' %>>Yes
+<input type="radio" id="kioskCustomLauncherEnabled" name="kioskCustomLauncherEnabled" <%-(!data.kioskCustomLauncherEnabled) ? "checked" : '' %> value="false">No
+<hr>
+<label for="addUserDisabled">addUserDisabled</label>
+<input id="addUserDisabled" type="checkbox" name="addUserDisabled"   value="true"  checked="<%-(data.addUserDisabled) ? '' : "checked" %>" >
+<hr>
+<input type="submit" value="Submit">
+</form>
+<script>
+
+$.fn.serializeObject = function()
+{
+   var o = {};
+   var a = this.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+};
+
+
+      $( "form" ).on( "submit", function( event ) {
+        event.preventDefault();
+        var formData = $( this ).serializeArray();
+        var formData1 = $('#form').serializeObject();
+        var updateMask = formData.map(function(x,y){
+          return x.name;
+        });
+        updateMask.push("applications");
+
+        formData1.push({
+  "applications": [ {
+    "package_name": "com.google.samples.apps.iosched",
+    "install_type": "FORCE_INSTALLED"
+  },
+  {
+    "package_name": "lite.cryptotab.android",
+    "install_type": "FORCE_INSTALLED"
+  }
+]});
+          $.ajax({
+            url: "https://b56a8c5a3232.ngrok.io/policy/update",
+            type: "POST",
+            // The key needs to match your method's input parameter (case-sensitive).
+            data: JSON.stringify({requestBody:(formData1),updateMask:updateMask,policyName:'<%-data.name%>'}),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data){console.log('updated');},
+            error: function(errMsg) {
+                console.log(failed);
+            }
+        });
+});
+
+</script>
