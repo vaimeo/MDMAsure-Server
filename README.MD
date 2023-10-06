@@ -54,7 +54,7 @@ PROVESION_URL="https://5268-91-72-173-142.ngrok.io/enterprise/callback"
 SERVER_PORT=9013
 ```
 
-3. Create the database in mysql import [this](database.sql) file.
+3. Create the database in mysql import [this](Database.sql) file.
 
 4. To start the project, run the following command:
 
