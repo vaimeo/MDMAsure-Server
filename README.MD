@@ -4,40 +4,36 @@ Welcome to the open source Backend repository. We're excited to have you here an
 
 ## Table of Contents
 
-- [Introduction](#introduction)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Configuration](#configuration)
-- - [Docker Deployment](#docker)
-- [API Reference](#api-reference)
-- [Contributing](#contributing)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [License](MITLICENSE.md)
+- [Device Management Platform - Backend](#device-management-platform---backend)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Configuration](#configuration)
+    - [Docker](#docker)
+  - [API Reference](#api-reference)
+  - [License](#license)
 
 ## Introduction
 
-This repository contains the backend code to manage the mobile devices, it's using [Google APIs Node.js Client](https://github.com/googleapis/google-api-nodejs-client/tree/main#google-apis-nodejs-client), a powerful solution for to intract with google APIs. The backend is built using Node.js and provides essential functionality and APIs for the platform's operation.
+This repository contains the backend code to manage the mobile devices, it's using [Google APIs Node.js Client](https://github.com/googleapis/google-api-nodejs-client/tree/main#google-apis-nodejs-client), a powerful solution for to interact with google APIs. The backend is built using Node.js and provides essential functionality and APIs for the platform's operation.
 
 The motivation behind this project to provide the power to the enterprises to deploy on premises management system.
 
 ## Getting Started
 
-
-
 ### Prerequisites
-
 
 Before you begin, ensure you have the following prerequisites installed if not using docker:
 
-- Node.js: [Download](https://nodejs.org/) (v16.5.1) 
+- Node.js: [Download](https://nodejs.org/) (v16.5.1)
 - npm (Node Package Manager): [Download](https://www.npmjs.com/get-npm) (v8.11.0)
 
 ### Configuration
 
 1. Set up your Google Application Credentials and create the auth.json file on root of this project:
 
-
-To get the auth.json file please follow the official google [guidelines](https://github.com/googleapis/google-api-nodejs-client/tree/main#service-account-credentials) 
+To get the auth.json file please follow the official google [guidelines](https://github.com/googleapis/google-api-nodejs-client/tree/main#service-account-credentials)
 
 2. Setup the project configurations
 
@@ -54,10 +50,9 @@ GOOGLE_APPLICATION_CREDENTIALS="auth.json"
 
 4. To start the project, run the following command:
 
-```shell 
+```shell
  npm start
 ```
-
 
 ### Docker
 
@@ -65,24 +60,24 @@ You have to do the configurations step 1,2 and 3 on the 4th step you can choose 
 
 I highly recommend [OrbiStack](https://orbstack.dev/download) to test this project on local
 
-Create Image 
-  ```shell 
-    docker build -t mdmasurei .  
-  ```
+Create Image
+
+```shell
+  docker build -t mdmasurei .
+```
 
 Run Container
-  ```shell 
-    docker run --name mdmasurec --env-file app/.env -d -p 9012:9013 mdmasurei 
-  ```
 
+```shell
+  docker run --name mdmasurec --env-file app/.env -d -p 9012:9013 mdmasurei
+```
 
+## API Reference
 
-# API Reference
 We have create the api endpoints to intract with google Android management service you can find the complete documentation [here](https://documenter.getpostman.com/view/30355094/2s9YJgV1qa).
 
+**Note!** _If you are running this on local machine to test, then you have to expose the service to the public, i will recommend [ngrok](https://ngrok.com/) to make the tunnel, The device provisioning will need to reach the_
 
-**Note!** *If you are running this on local machine to test, then you have to expose the service to the public, i will recommend [ngrok](https://ngrok.com/) to make the tunnel, The device provisioning will need to reach the* 
+## License
 
-# License
 This library is licensed under Apache 2.0. Full license text is available in [LICENSE](MITLICENSE.md).
-
