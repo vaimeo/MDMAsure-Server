@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "test": "PORT=9012 node ./bin/www",
@@ -19,6 +19,11 @@
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",
-    "socket.io": "^4.2.0"
+    "socket.io": "^4.2.0",
+    "sqlite": "^5.0.1",
+    "sqlite3": "https://github.com/tryghost/node-sqlite3/tarball/master"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1"
   }
 }

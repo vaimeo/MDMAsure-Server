@@ -1,109 +1,141 @@
+'use strict';
 const db = require('../services/db');
 const helper = require('../helper');
 const config = require('../config');
 
-async function getList(enterprise_id,page = 1){
+async function getList(enterprise_id, page = 1) {
   const offset = helper.getOffset(page, config.listPerPage);
-  const rows = await db.query(
-    `SELECT * from policies where enterprise_id=? LIMIT ?,?`, 
-    [enterprise_id,offset, config.listPerPage]
-  );
-  const data = helper.emptyOrRows(rows);
-  const meta = {page};
+  // Use a parameterized query to prevent SQL injection
+  const sql = `SELECT * FROM policies WHERE enterprise_id = ? LIMIT ? OFFSET ?`;
+  const params = [enterprise_id, config.listPerPage, offset];
 
-  return {
-    code:1001,
-    data,
-    meta
-  }
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        const data = helper.emptyOrRows(rows);
+        const meta = { page };
+        resolve({ code: 1001, data, meta });
+      }
+    });
+  });
 }
 
+async function getDetails(id, columns = '*') {
+  // Use a parameterized query to prevent SQL injection
+  const sql = `SELECT ${columns} FROM policies WHERE id = ?`;
+  const params = [id];
 
-
-async function getDetails(id,colums='*'){
-  const rows = await db.query(
-    `SELECT ${colums} from policies where id= ?`, 
-    [id]
-  );
-  console.log('rows=',rows);
-  const data = helper.emptyOrRows(rows[0]);
-  
-  return {
-    data:data,
-    code:1001
-  }
+  return new Promise((resolve, reject) => {
+    db.all(sql, params, (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('rows=', rows);
+        const data = helper.emptyOrRows(rows[0]);
+        resolve({ data, code: 1001 });
+      }
+    });
+  });
 }
 
+async function update(id, title, body, enroll_url) {
+  // Use a parameterized query to prevent SQL injection
+  const sql = `UPDATE policies SET name = ?, policy_data = ?, enroll_url = ? WHERE id = ?`;
+  const params = [title, JSON.stringify(body), enroll_url, id];
 
-  async function update(id,title,body,enroll_url){
-    const rows = await db.query(
-      `update policies set name=? , policy_data=? ,enroll_url=? where id= ?`, 
-      [title,JSON.stringify(body),enroll_url,id]
-    );
-    console.log('udpate=',rows);
-    return {
-      messsage:'record has been updated'
-    }
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('update=', this.changes);
+        resolve({ message: 'Record has been updated' });
+      }
+    });
+  });
+}
+
+async function create(title, body, enroll_url, enterprise_id, id = 0) {
+  var rows = '';
+  if (id > 0) {
+    // Update existing record
+    const sql = `UPDATE policies SET name = ?, policy_data = ?, enroll_url = ? WHERE id = ?`;
+    const params = [title, JSON.stringify(body), enroll_url, id];
+    rows = await db.run(sql, params);
+  } else {
+    // Insert new record
+    const sql = `INSERT INTO policies (name, policy_data, enroll_url, enterprise_id, mdm_policy_id) VALUES (?, ?, ?, ?, ?)`;
+    const params = [title, JSON.stringify(body), enroll_url, enterprise_id, body.name];
+    rows = await db.run(sql, params);
   }
 
+  console.log('update=', rows);
+  return {
+    message: 'Record has been updated',
+    enroll_url: enroll_url,
+    code: 1001,
+  };
+}
 
-  async function create(title,body,enroll_url,enterprise_id,id=0){
-    var rows ='';
-    if(id>0)//update
-    {
-       rows = await db.query(
-        `update  policies set name=? , policy_data=? ,enroll_url=? where id=?`, 
-        [title,JSON.stringify(body),enroll_url,id]
-      );
-  
-    }
-    else//insert
-    {
-       rows = await db.query(
-        `insert into policies set name=? , policy_data=? ,enroll_url=?, enterprise_id=? , mdm_policy_id=?`, 
-        [title,JSON.stringify(body),enroll_url,enterprise_id,body.name  ]
-      );
-    }
-    console.log('udpate=',rows);
-    return {
-      messsage:'record has been updated',
-      enroll_url:enroll_url,
-      code:1001
-    }
-  }
-  
+async function insertNewlist(body, enterprise_id) {
+  // First, delete existing records for the given enterprise
+  await deleteRecordsByEnterpriseId(enterprise_id);
 
+  // Use a parameterized query to insert new records
+  const sql = `INSERT INTO policies (name, enterprise_id, mdm_policy_id, policy_data) VALUES ${body}`;
 
-  async function insertNewlist(body,enterprise_id){
+  return new Promise((resolve, reject) => {
+    db.run(sql, [], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('insert=', this.changes);
+        resolve({ message: 'Records have been inserted' });
+      }
+    });
+  });
+}
 
-    const del = await db.query(`delete from policies where enterprise_id=`+enterprise_id);
-    console.log('del=',del);
+// Add a function to delete records by enterprise_id
+async function deleteRecordsByEnterpriseId(enterprise_id) {
+  const sql = `DELETE FROM policies WHERE enterprise_id = ?`;
+  const params = [enterprise_id];
 
-    const rows = await db.query(
-      `insert into policies (name,enterprise_id,mdm_policy_id,policy_data)
-      values `+body,
-    );
-    console.log('insert=',rows);
-    return {
-      messsage:'record has been updated'
-    }
-  }
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+}
 
+async function deleteRecord(id) {
+  // Use a parameterized query to prevent SQL injection
+  const sql = `DELETE FROM policies WHERE id = ?`;
+  const params = [id];
 
-
-  async function deleteRecord(id){
-    const rows = await db.query(
-      `delete from policies where id=?`, 
-      [id]
-    );
-    console.log('udpate=',rows);
-    return {
-      messsage:'record has been updated'
-    }
-  }
-  
-  
+  return new Promise((resolve, reject) => {
+    db.run(sql, params, function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        console.log('update=', this.changes);
+        resolve({ message: 'Record has been updated' });
+      }
+    });
+  });
+}
 
 module.exports = {
-    getList,getDetails,update,create,insertNewlist,deleteRecord
-}
+  getList,
+  getDetails,
+  update,
+  create,
+  insertNewlist,
+  deleteRecord,
+};
