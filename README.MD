@@ -4,15 +4,15 @@ Welcome to the open source Backend repository. We're excited to have you here an
 
 ## Table of Contents
 
-- [Device Management Platform - Backend](#device-management-platform---backend)
-  - [Table of Contents](#table-of-contents)
-  - [Introduction](#introduction)
-  - [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Configuration](#configuration)
-    - [Docker](#docker)
-  - [API Reference](#api-reference)
-  - [License](#license)
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Configuration](#configuration)
+  - [Docker Deployment](#docker)
+- [API Reference](#api-reference)
+- [Contributing](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [License](MITLICENSE.md)
 
 ## Introduction
 
@@ -46,7 +46,7 @@ SERVER_PORT=9013
 GOOGLE_APPLICATION_CREDENTIALS="auth.json"
 ```
 
-3. Sqlite database file is [this](app/mdm_database.sql) file.
+3. Sqlite database file is [this](app/mdm_database.db) file.
 
 4. To start the project, run the following command:
 
